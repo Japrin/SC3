@@ -226,10 +226,15 @@ sc3_plot_markers.SingleCellExperiment <- function(object, k, auroc, p.val, show_
     
     row.ann <- data.frame(Cluster = factor(markers[, 1], levels = unique(markers[, 1])))
     rownames(row.ann) <- markers$feature_symbol
-    
+   
+    tryCatch(
     do.call(pheatmap::pheatmap, c(list(dataset[markers$feature_symbol, , drop = FALSE], show_colnames = FALSE, 
         cluster_rows = FALSE, cluster_cols = hc, cutree_cols = k, annotation_row = row.ann, annotation_names_row = FALSE, 
         gaps_row = which(diff(markers[, 1]) != 0), cellheight = 10), list(annotation_col = ann)[add_ann_col],plot.extra.par))
+    ,error=function(e){
+        cat(sprintf("Error occur when call pheatmap::pheatmap in sc3_plot_markers.SingleCellExperiment(). Mybe no markers found.\n"))
+        print(e)
+    })
 }
 
 #' @rdname sc3_plot_markers

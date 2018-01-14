@@ -53,6 +53,7 @@ sc3.SingleCellExperiment <- function(object, ks, gene_filter, pct_dropout_min, p
     object <- sc3_calc_consens(object)
     if (biology) {
         tryCatch({
+        #save(object,file=sprintf("./sce.debug.RData"))
         object <- sc3_calc_biology(object, ks)
         }, error = function(e) {
             print("Error occur when calc_biology");
